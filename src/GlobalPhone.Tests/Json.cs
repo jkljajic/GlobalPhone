@@ -17,7 +17,7 @@ namespace GlobalPhone.Tests
                 _match = match;
             }
 
-            public Constraint Resolve()
+            public IConstraint Resolve()
             {
                 return new JsonEqualConstraint(_match);
             }
@@ -36,10 +36,11 @@ namespace GlobalPhone.Tests
             {
             }
 
-            public override bool Matches(object actual)
+            public override bool Equals(object actual)
             {
-                return base.Matches(SerializeObject(actual));
+                return base.Equals(SerializeObject(actual));
             }
+
         }
         public static IResolveConstraint EqualTo(object match)
         {
