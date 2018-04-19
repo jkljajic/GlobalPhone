@@ -138,9 +138,22 @@ namespace GlobalPhone
             return new Tuple<object[], Nokogiri.Node>(territories.ToArray(), mainTerritoryNode);
         }
 
+        private string[] PossibleNumberPattern(Nokogiri.Node node)
+        {
+           
+            var nodes = node.Search("fixedLine possibleLengths").FirstOrDefault();
+            if (nodes != null)
+            {
+                   return new string[]{$"\\d{{{(nodes["localOnly"]+","+nodes["national"]).Trim(',')}}}"};
+            }
+
+            return new string[]{};
+        }
+
         private IDictionary CompileTerritory(Nokogiri.Node node)
         {
-            var possibleNumberPattern = Pattern(node, "generalDesc possibleNumberPattern");
+            //var possibleNumberPattern = Pattern(node, "generalDesc possibleNumberPattern");
+            var possibleNumberPattern = PossibleNumberPattern(node);
             var nationalNumberPattern = Pattern(node, "generalDesc nationalNumberPattern");
             var d = new Dictionary<string, object>
             {
